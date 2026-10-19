@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfoSec Challenge | Information Security Quiz</title>
+<style>
+:root{--navy:#142d4e;--blue:#397bc1;--pale:#eef5fc;--green:#218653;--red:#c93e49;--ink:#182538;--muted:#65758a}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(135deg,#eaf2fb,#f7f9fc);color:var(--ink);display:flex;align-items:center;justify-content:center;padding:24px}
+.app{width:min(760px,100%);background:white;border-radius:24px;overflow:hidden;box-shadow:0 18px 55px #142d4e1c}
+.hero{background:var(--navy);color:white;padding:26px 30px}
+.brand{display:flex;gap:14px;align-items:center}.shield{font-size:38px}.brand h1{font-size:clamp(1.35rem,4vw,2rem);margin:0}.brand p{margin:5px 0 0;color:#d3e5f7}
+.content{padding:28px}
+.stats{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:.92rem;margin-bottom:14px}
+.track{height:7px;background:#e7edf4;border-radius:99px;overflow:hidden;margin-bottom:26px}.fill{height:100%;width:0;background:var(--blue);transition:width .25s}
+h2{font-size:1.25rem;line-height:1.5;margin:0 0 20px}
+.answers{display:grid;gap:11px}
+.answer{display:flex;align-items:center;gap:12px;text-align:left;border:1.5px solid #dce4ed;background:white;color:var(--ink);padding:14px 15px;border-radius:13px;font:inherit;cursor:pointer;transition:.15s}
+.answer:hover:not(:disabled){border-color:var(--blue);background:#f5f9ff}
+.letter{width:31px;height:31px;flex:0 0 31px;border-radius:9px;background:#edf2f7;display:grid;place-items:center;font-weight:700}
+.answer:disabled{cursor:default}.answer.correct{border-color:var(--green);background:#eaf7ef;color:#155f38}.answer.correct .letter{background:var(--green);color:white}
+.answer.wrong{border-color:var(--red);background:#fff0f0;color:#92232d}.answer.wrong .letter{background:var(--red);color:white}
+.feedback{margin-top:18px;padding:15px;border-radius:12px;background:#f0f4f8;line-height:1.55}.feedback.good{background:#eaf7ef}.feedback.bad{background:#fff0f0}
+.actions{display:flex;gap:12px;margin-top:22px}.btn{border:0;border-radius:11px;padding:13px 18px;font:inherit;font-weight:700;cursor:pointer}.btn.primary{background:var(--blue);color:white;flex:1}.btn.primary:disabled{opacity:.45;cursor:not-allowed}.btn.secondary{background:#edf2f7;color:var(--ink)}
+.intro,.result{text-align:center;padding:10px 0}.big-icon{font-size:56px;margin-bottom:8px}.intro h2,.result h2{font-size:1.7rem;margin-bottom:10px}.intro p,.result p{color:var(--muted);line-height:1.65;max-width:500px;margin:0 auto 20px}
+.pills{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:20px 0}.pill{background:var(--pale);color:#28527f;border-radius:99px;padding:7px 12px;font-size:.9rem}
+.score{font-size:3rem;font-weight:800;color:var(--blue);margin:8px 0}
+footer{text-align:center;color:#8190a1;font-size:.8rem;padding:0 20px 22px}
+@media(max-width:520px){body{padding:12px}.hero{padding:22px}.content{padding:21px}.answer{padding:12px}.actions{flex-direction:column-reverse}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="hero">
+    <div class="brand"><div class="shield" aria-hidden="true">🛡️</div><div><h1>INFOSEC CHALLENGE</h1><p>Information Security Management Quiz</p></div></div>
+  </header>
+  <section class="content" id="game" aria-live="polite">
+    <div class="intro">
+      <div class="big-icon">🔐</div>
+      <h2>Ready to test your knowledge?</h2>
+      <p>Answer 10 questions about information security, the CIA triad, ISO 27001, ISMS and risk management. Get instant feedback and see your final score.</p>
+      <div class="pills"><span class="pill">10 questions</span><span class="pill">Multiple choice</span><span class="pill">True / False</span></div>
+      <button class="btn primary" id="start">Start Game →</button>
+    </div>
+  </section>
+  <footer>Study, play, and improve your InfoSec knowledge.</footer>
+</main>
+<script>
+const questions = [
+ {q:"Which of the following represents the three main principles of information security?",a:["A. Cost, Speed and Quality","B. Hardware, Software and Network","C. Confidentiality, Integrity and Availability","D. Privacy, Access and Performance"],correct:2,why:"The CIA triad stands for Confidentiality, Integrity and Availability."},
+ {q:"The goal of ISM is to ensure information security is effectively managed in all services and IT Service Management activities.",a:["True","False"],correct:0,why:"True. ISM helps manage information security across services and ITSM activities."},
+ {q:"Which international standard serves as a framework for an Information Security Management System (ISMS)?",a:["A. ISO 9001","B. ISO 20000","C. ISO 27001","D. ISO 14001"],correct:2,why:"ISO/IEC 27001 specifies requirements for an Information Security Management System."},
+ {q:"An ISMS is the basis for developing a cost-effective information security program that supports business objectives.",a:["True","False"],correct:0,why:"True. An ISMS helps an organization manage security in line with its business objectives."},
+ {q:"What does integrity ensure?",a:["A. Information is complete, accurate and protected from unauthorized changes","B. Information is available only at night","C. Information is shared with everyone","D. Information is deleted regularly"],correct:0,why:"Integrity protects information against unauthorized or improper changes."},
+ {q:"What does availability mean?",a:["A. Information is kept secret","B. Information cannot be modified","C. Information is available and usable when required","D. Information is only available to administrators"],correct:2,why:"Availability ensures authorized users can access information when they need it."},
+ {q:"What is the purpose of risk management in information security?",a:["A. To communicate with customers","B. To create security training materials","C. To monitor employee attendance","D. To identify, assess and manage security risks"],correct:3,why:"Risk management helps identify threats, assess their impact and decide how to address them."},
+ {q:"Why is a training strategy important in information security?",a:["A. To reduce the number of employees","B. To improve computer performance","C. To educate employees about information security","D. To increase the organization's revenue"],correct:2,why:"Training helps employees understand security policies, risks and safe practices."},
+ {q:"Which activity does the security manager assist in?",a:["A. Designing the information security policy","B. Performing risk analyses and risk management","C. Business impact analysis","D. Communicating security policy matters"],correct:1,why:"For this quiz, the expected answer is B: performing risk analyses and risk management. Check your course notes if your lecturer provided a different answer."},
+ {q:"Information from the SLM process is an output.",a:["True","False"],correct:1,why:"False. According to the provided answer, information from the SLM process is an input."}
+];
+let index=0,score=0,chosen=null,locked=false;
+const game=document.getElementById('game');
+document.getElementById('start').addEventListener('click',startGame);
+function startGame(){index=0;score=0;chosen=null;locked=false;renderQuestion()}
+function renderQuestion(){
+ const item=questions[index];chosen=null;locked=false;
+ game.innerHTML=`<div class="stats"><span>QUESTION ${index+1} OF ${questions.length}</span><strong>⭐ ${score} points</strong></div><div class="track"><div class="fill" style="width:${index/questions.length*100}%"></div></div><h2>${item.q}</h2><div class="answers">${item.a.map((a,i)=>`<button class="answer" data-index="${i}"><span class="letter">${String.fromCharCode(65+i)}</span><span>${a}</span></button>`).join('')}</div><div id="feedback"></div><div class="actions"><button class="btn secondary" id="quit">Quit</button><button class="btn primary" id="next" disabled>Next Question →</button></div>`;
+ game.querySelectorAll('.answer').forEach(b=>b.addEventListener('click',()=>choose(Number(b.dataset.index))));
+ document.getElementById('next').addEventListener('click',nextQuestion);
+ document.getElementById('quit').addEventListener('click',showIntro);
+}
+function choose(i){
+ if(locked)return;locked=true;chosen=i;
+ const item=questions[index],correct=i===item.correct;
+ if(correct)score++;
+ game.querySelectorAll('.answer').forEach((b,j)=>{b.disabled=true;if(j===item.correct)b.classList.add('correct');else if(j===i)b.classList.add('wrong')});
+ const feedback=document.getElementById('feedback');
+ feedback.className='feedback '+(correct?'good':'bad');
+ feedback.innerHTML=`<strong>${correct?'✓ Correct!':'✕ Not quite!'}</strong><br>${item.why}`;
+ document.querySelector('.stats strong').textContent=`⭐ ${score} points`;
+ document.getElementById('next').disabled=false;
+ document.getElementById('next').textContent=index===questions.length-1?'See Results →':'Next Question →';
+}
+function nextQuestion(){if(!locked)return;if(index<questions.length-1){index++;renderQuestion()}else showResult()}
+function showResult(){
+ const pct=Math.round(score/questions.length*100);
+ const heading=score>=8?'Excellent work!':score>=5?'Good job!':'Keep practising!';
+ const message=score>=8?'You understand the main information security concepts well.':score>=5?'You have a good start. Review the concepts you found difficult.':'Review your answers and try again to improve your score.';
+ game.innerHTML=`<div class="result"><div class="big-icon">${score>=8?'🏆':score>=5?'🎖️':'📘'}</div><h2>${heading}</h2><p>${message}</p><div class="score">${score} / ${questions.length}</div><div class="track"><div class="fill" style="width:${pct}%"></div></div><p><strong>${pct}% correct</strong></p><div class="actions"><button class="btn secondary" id="review">Review Answers</button><button class="btn primary" id="again">Play Again ↻</button></div></div>`;
+ document.getElementById('again').addEventListener('click',startGame);
+ document.getElementById('review').addEventListener('click',showReview);
+}
+function showReview(){
+ game.innerHTML=`<h2>Answer Review</h2>${questions.map((item,i)=>`<div class="feedback ${''}" style="margin-bottom:10px"><strong>${i+1}. ${item.q}</strong><br><span style="color:var(--green);font-weight:700">Correct answer: ${item.a[item.correct]}</span><br><span>${item.why}</span></div>`).join('')}<div class="actions"><button class="btn primary" id="again">Play Again ↻</button></div>`;
+ document.getElementById('again').addEventListener('click',startGame);
+}
+function showIntro(){game.innerHTML=`<div class="intro"><div class="big-icon">🔐</div><h2>Ready to test your knowledge?</h2><p>Answer 10 questions about information security, the CIA triad, ISO 27001, ISMS and risk management.</p><div class="pills"><span class="pill">10 questions</span><span class="pill">Instant feedback</span><span class="pill">Final score</span></div><button class="btn primary" id="start">Start Game →</button></div>`;document.getElementById('start').addEventListener('click',startGame)}
+</script>
+</body>
+</html>
